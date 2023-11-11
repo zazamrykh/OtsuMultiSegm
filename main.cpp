@@ -23,7 +23,7 @@ void print_hist(Hist* hist);
 void mean_filter_hist(Hist *hist, int filter_radius);
 
 int main() {
-    Mat image_opencv = imread("..//examples//lenna.png", IMREAD_GRAYSCALE);
+    Mat image_opencv = imread("..//examples//mountains.png", IMREAD_GRAYSCALE);
     int image[IMAGE_SIZE];
     from_cv_to_array(&image_opencv, image);
     display_image(image, IMAGE_WIDTH, IMAGE_HEIGHT, "input image", false);
@@ -155,7 +155,7 @@ void calculate_hist(const int image[IMAGE_SIZE], Hist* hist, int blur_radius) {
                     - hist->min_color) / hist->hist_step;
 
             if (hist_index >= HIST_SIZE) {
-                hist_index--;
+                hist_index = HIST_SIZE - 1;
             }
             hist->arr[hist_index]++;
 

@@ -1,15 +1,15 @@
 #include "otsu_segm.h"
 
-void calculate_sigma(Hist *hist, int class_num, int *class_size, int *color_sums, float *best_sigma,
+void calculate_sigma(Hist *hist, int class_num, int *class_size, long *color_sums, float *best_sigma,
                       const int *thresholds, int *best_thresholds);
 
 // Recursive method for iterating through hist
 void run(Hist *hist, int class_num, int *thresholds, int *best_thresholds, int class_size[MAX_CLASS_NUMBER],
-         int color_sums[MAX_CLASS_NUMBER], float *best_sigma, int current_class, int start_pos);
+         long color_sums[MAX_CLASS_NUMBER], float *best_sigma, int current_class, int start_pos);
 
 void otsu_segm(Hist *hist, int class_num, int *best_thresholds) {
     int class_size[MAX_CLASS_NUMBER];
-    int color_sums[MAX_CLASS_NUMBER];
+    long color_sums[MAX_CLASS_NUMBER];
     int thresholds[MAX_CLASS_NUMBER];
     float best_sigma = 0;
     run(hist, class_num, thresholds, best_thresholds, class_size, color_sums, &best_sigma, 0, 0);
@@ -20,7 +20,7 @@ void otsu_segm(Hist *hist, int class_num, int *best_thresholds) {
 }
 
 void run(Hist *hist, int class_num, int *thresholds, int *best_thresholds, int class_size[MAX_CLASS_NUMBER],
-         int color_sums[MAX_CLASS_NUMBER], float *best_sigma, int current_class, int start_pos) {
+         long color_sums[MAX_CLASS_NUMBER], float *best_sigma, int current_class, int start_pos) {
     class_size[current_class] = 0;
     color_sums[current_class] = 0;
     for (int i = start_pos; i <= hist->max_index - (class_num - current_class + 2); ++i) {
@@ -37,7 +37,7 @@ void run(Hist *hist, int class_num, int *thresholds, int *best_thresholds, int c
     }
 }
 
-void calculate_sigma(Hist *hist, int class_num, int *class_size, int *color_sums, float *best_sigma,
+void calculate_sigma(Hist *hist, int class_num, int *class_size, long *color_sums, float *best_sigma,
                       const int *thresholds, int *best_thresholds) {
     // Need to calculate last class mean and last class proba
     class_size[class_num - 1] = hist->count;
